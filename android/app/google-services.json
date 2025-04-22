@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "326685454708",
+    "project_id": "mad-competition",
+    "storage_bucket": "mad-competition.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:326685454708:android:ae9db26c0ffaeeef09fc21",
+        "android_client_info": {
+          "package_name": "com.example.mad_competition"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNreRPX9nU4TGCiJbM43VXRxZyZwPeNKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

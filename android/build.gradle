@@ -1,6 +1,19 @@
+buildscript {
+    repositories {
+        google()  // Google repository
+        mavenCentral()  // Maven central repository
+    }
+    dependencies {
+        // Android Gradle Plugin
+        classpath 'com.android.tools.build:gradle:7.0.4' // Use the appropriate version
+        // Firebase services classpath
+        classpath 'com.google.gms:google-services:4.4.2'  // This is essential for Firebase integration
+    }
+}
+
 allprojects {
     repositories {
-        google()
+        google()  // Ensure this repository is included for Firebase dependencies
         mavenCentral()
     }
 }
