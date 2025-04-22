@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';  // Import Firebase core
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();  // Ensure widgets are initialized before Firebase
-  await Firebase.initializeApp();  // Initialize Firebase
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Add Firebase options
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: 'YOUR_API_KEY',
+      appId: 'YOUR_APP_ID',
+      messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+      projectId: 'YOUR_PROJECT_ID',
+      // Add other required fields based on your platform (iOS/Android/Web)
+    ),
+  );
 
   runApp(const MyApp());
 }
@@ -14,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Firebase Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -26,7 +36,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
   final String title;
 
   @override
@@ -35,6 +44,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  bool _firebaseReady = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _firebaseReady = true; // Firebase already initialized in main
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -45,11 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: Center(
-        child: Column(
+        child: _firebaseReady
+            ? Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text('You have pushed the button this many times:'),
@@ -58,20 +73,10 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 20),
-            FutureBuilder(
-              future: _checkFirebaseInitialization(),  // Check Firebase status
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return const Text('Firebase Initialized Successfully!');
-                }
-              },
-            ),
+            const Text('Firebase Initialized Successfully!'),
           ],
-        ),
+        )
+            : const CircularProgressIndicator(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
@@ -79,16 +84,5 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ),
     );
-  }
-
-  // Check Firebase initialization status
-  Future<bool> _checkFirebaseInitialization() async {
-    try {
-      await Firebase.initializeApp();
-      return true;
-    } catch (e) {
-      print('Error initializing Firebase: $e');
-      return false;
-    }
   }
 }
