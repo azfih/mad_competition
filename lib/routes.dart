@@ -7,7 +7,7 @@ import 'screens/auth/register_screen.dart';
 import 'screens/tutor/tutor_dashboard.dart';
 import 'screens/student/student_dashboard.dart';
 import 'screens/tutor/create_course_screen.dart';
-// Add more screens as needed
+ Add more screens as needed
 
 final Map<String, WidgetBuilder> appRoutes = {
 
@@ -15,13 +15,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/': (context) => const SplashScreen(),
   '/login': (context) => const LoginScreen(),
   '/register': (context) => const RegisterScreen(),
-  '/tutorDashboard': (context) {
-    final uid = ModalRoute.of(context)!.settings.arguments as String;
-    return TutorDashboard(tutorId: uid);
-  },
-  '/studentDashboard': (context) {
-    final uid = ModalRoute.of(context)!.settings.arguments as String;
-    return StudentDashboard(studentId: uid);
-  },
-  '/createCourse': (context) => const CreateCourseScreen(),
+
 };

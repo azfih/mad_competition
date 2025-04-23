@@ -19,6 +19,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void registerUser() async {
     try {
+      if (emailController.text.trim().isEmpty || passwordController.text.trim().isEmpty) {
+        throw FirebaseAuthException(code: 'empty_fields', message: 'Please fill in all fields');
+      }
+
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
@@ -30,6 +34,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
 
       Navigator.pushReplacementNamed(context, '/dashboard');
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = 'An error occurred';
+      if (e.code == 'weak-password') {
+        errorMessage = 'The password is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        errorMessage = 'This email is already in use.';
+      } else if (e.code == 'empty_fields') {
+        errorMessage = e.message!;
+      } else if (e.code == 'invalid-email') {
+        errorMessage = 'Invalid email format.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage)));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
     }

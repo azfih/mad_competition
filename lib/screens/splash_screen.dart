@@ -39,9 +39,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Image.asset('assets/logo.jpg', width: 100), // Add your COMSATS logo here
+        child: Image.asset(
+            'assets/logo.jpg', width: 100), // Add your COMSATS logo here
       ),
     );
   }

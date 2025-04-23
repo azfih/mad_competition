@@ -18,6 +18,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void loginUser() async {
     try {
+      if (emailController.text.trim().isEmpty || passwordController.text.trim().isEmpty) {
+        throw FirebaseAuthException(code: 'empty_fields', message: 'Please fill in all fields');
+      }
+
       UserCredential cred = await _auth.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
@@ -31,8 +35,20 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         Navigator.pushReplacementNamed(context, '/studentDashboard', arguments: cred.user!.uid);
       }
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = 'Login failed';
+      if (e.code == 'user-not-found') {
+        errorMessage = 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        errorMessage = 'Wrong password provided.';
+      } else if (e.code == 'empty_fields') {
+        errorMessage = e.message!;
+      } else if (e.code == 'invalid-email') {
+        errorMessage = 'Invalid email format.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage)));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Login Failed: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
     }
   }
 
