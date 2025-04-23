@@ -1,0 +1,72 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  String role = 'student'; // default
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  void registerUser() async {
+    try {
+      UserCredential cred = await _auth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      await _db.collection('users').doc(cred.user!.uid).set({
+        'email': emailController.text.trim(),
+        'role': role,
+      });
+
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Register")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(controller: emailController, decoration: const InputDecoration(labelText: "Email")),
+            TextField(controller: passwordController, decoration: const InputDecoration(labelText: "Password"), obscureText: true),
+            const SizedBox(height: 10),
+            DropdownButton<String>(
+              value: role,
+              items: const [
+                DropdownMenuItem(value: 'student', child: Text("Student")),
+                DropdownMenuItem(value: 'tutor', child: Text("Tutor")),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  role = value!;
+                });
+              },
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(onPressed: registerUser, child: const Text("Register")),
+            TextButton(
+              onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+              child: const Text("Already have an account? Login"),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

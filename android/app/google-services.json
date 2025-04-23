@@ -1,13 +1,33 @@
 {
   "project_info": {
-    "project_number": "326685454708",
-    "project_id": "mad-competition",
-    "storage_bucket": "mad-competition.firebasestorage.app"
+    "project_number": "811727000444",
+    "firebase_url": "https://financialtracker-f6b53-default-rtdb.firebaseio.com",
+    "project_id": "financialtracker-f6b53",
+    "storage_bucket": "financialtracker-f6b53.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:326685454708:android:ae9db26c0ffaeeef09fc21",
+        "mobilesdk_app_id": "1:811727000444:android:f3b8bac355ce9e794c4af9",
+        "android_client_info": {
+          "package_name": "com.example.financialtracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATToncKjQ1dHvyoLBv8Y7rx7sQDHHXqCI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811727000444:android:6ff3a6e26d73b0154c4af9",
         "android_client_info": {
           "package_name": "com.example.mad_competition"
         }
@@ -15,7 +35,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBNreRPX9nU4TGCiJbM43VXRxZyZwPeNKc"
+          "current_key": "AIzaSyATToncKjQ1dHvyoLBv8Y7rx7sQDHHXqCI"
         }
       ],
       "services": {
