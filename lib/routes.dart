@@ -7,7 +7,6 @@ import 'screens/auth/register_screen.dart';
 import 'screens/tutor/tutor_dashboard.dart';
 import 'screens/student/student_dashboard.dart';
 import 'screens/tutor/create_course_screen.dart';
- Add more screens as needed
 
 final Map<String, WidgetBuilder> appRoutes = {
 
