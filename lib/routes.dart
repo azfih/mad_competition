@@ -7,49 +7,42 @@ import 'screens/tutor/create_course_screen.dart';
 import 'screens/student/student_dashboard.dart';
 import 'screens/student/course_detail_screen.dart';
 import 'screens/student/lesson_view_screen.dart';
-import 'screens/common/error_screen.dart'; // Import ErrorScreen
+import 'screens/common/error_screen.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   '/': (context) => const SplashScreen(),
   '/login': (context) => const LoginScreen(),
   '/register': (context) => const RegisterScreen(),
+
   '/tutorDashboard': (context) {
     final uid = ModalRoute.of(context)?.settings.arguments as String?;
-    if (uid == null) {
-      return const ErrorScreen();
-    }
-    return TutorDashboard(tutorId: uid);
+    return uid != null ? TutorDashboard(tutorId: uid) : const ErrorScreen();
   },
+
   '/createCourse': (context) {
     final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    if (args == null || !args.containsKey('courseId') || !args.containsKey('tutorId')) {
-      return const ErrorScreen();
-    }
-    return CreateCourseScreen(
-      courseId: args['courseId'],
-      tutorId: args['tutorId'],
-    );
+    // No longer passing params in constructor
+    return (args != null && args.containsKey('tutorId'))
+        ? const CreateCourseScreen()
+        : const ErrorScreen();
   },
-  // Student Routes
+
   '/studentDashboard': (context) {
     final uid = ModalRoute.of(context)?.settings.arguments as String?;
-    if (uid == null) {
-      return const ErrorScreen();
-    }
-    return StudentDashboard(studentId: uid);
+    return uid != null ? StudentDashboard(studentId: uid) : const ErrorScreen();
   },
+
   '/courseDetail': (context) {
     final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    if (args == null || !args.containsKey('courseId')) {
-      return const ErrorScreen();
-    }
-    return CourseDetailScreen(courseId: args['courseId']);
+    return (args != null && args.containsKey('courseId'))
+        ? CourseDetailScreen(courseId: args['courseId'])
+        : const ErrorScreen();
   },
+
   '/lessonView': (context) {
     final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    if (args == null || !args.containsKey('lessonId')) {
-      return const ErrorScreen();
-    }
-    return LessonViewScreen(lessonId: args['lessonId']);
+    return (args != null && args.containsKey('lessonId'))
+        ? LessonViewScreen(lessonId: args['lessonId'])
+        : const ErrorScreen();
   },
 };
