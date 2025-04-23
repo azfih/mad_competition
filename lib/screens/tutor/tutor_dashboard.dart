@@ -1,17 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// tutor_dashboard.dart
 import 'package:flutter/material.dart';
-
-import 'create_course_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TutorDashboard extends StatelessWidget {
-  const TutorDashboard({super.key});
+  final String tutorId;
+  const TutorDashboard({super.key, required this.tutorId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Tutor Dashboard")),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('courses').snapshots(),
+        stream: FirebaseFirestore.instance.collection('courses').where('tutorId', isEqualTo: tutorId).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
 
@@ -23,20 +23,21 @@ class TutorDashboard extends StatelessWidget {
               final course = courses[index];
               final data = course.data() as Map<String, dynamic>;
               return ListTile(
-                title: Text(data['title']),
-                subtitle: Text(data['description']),
+                title: Text(data['title'] ?? ''),
+                subtitle: Text(data['description'] ?? ''),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () {
-                        // Navigate to CreateCourseScreen for editing
-                        Navigator.push(
+                        Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => CreateCourseScreen(courseId: course.id),
-                          ),
+                          '/createCourse',
+                          arguments: {
+                            'courseId': course.id,
+                            'tutorId': tutorId,
+                          },
                         );
                       },
                     ),
@@ -54,10 +55,15 @@ class TutorDashboard extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const CreateCourseScreen()),
-        ),
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            '/createCourse',
+            arguments: {
+              'tutorId': tutorId,
+            },
+          );
+        },
         child: const Icon(Icons.add),
       ),
     );
