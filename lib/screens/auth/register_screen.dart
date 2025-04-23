@@ -33,7 +33,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'role': role,
       });
 
-      Navigator.pushReplacementNamed(context, '/dashboard');
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Registration successful. Please login.")));
+      Navigator.pushReplacementNamed(context, '/login');
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'An error occurred';
       if (e.code == 'weak-password') {

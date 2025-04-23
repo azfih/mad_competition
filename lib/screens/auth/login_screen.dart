@@ -30,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
       final doc = await _db.collection('users').doc(cred.user!.uid).get();
       final role = doc.data()?['role'];
 
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login Successful")));
+
       if (role == 'tutor') {
         Navigator.pushReplacementNamed(context, '/tutorDashboard', arguments: cred.user!.uid);
       } else {
