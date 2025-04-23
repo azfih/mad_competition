@@ -27,11 +27,7 @@ final Map<String, WidgetBuilder> appRoutes = {
         : const ErrorScreen();
   },
 
-  '/studentDashboard': (context) {
-    final uid = ModalRoute.of(context)?.settings.arguments as String?;
-    return uid != null ? StudentDashboard(studentId: uid) : const ErrorScreen();
-  },
-
+  '/studentDashboard': (context) => const StudentDashboard(), // No studentId needed
   '/courseDetail': (context) {
     final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     return (args != null && args.containsKey('courseId'))

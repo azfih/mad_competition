@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,7 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
   void loginUser() async {
     try {
@@ -27,15 +27,22 @@ class _LoginScreenState extends State<LoginScreen> {
         password: passwordController.text.trim(),
       );
 
-      final doc = await _db.collection('users').doc(cred.user!.uid).get();
-      final role = doc.data()?['role'];
+      // Get user data from Realtime Database
+      final userSnapshot = await _database.child('users/${cred.user!.uid}').get();
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login Successful")));
+      if (userSnapshot.exists) {
+        final userData = userSnapshot.value as Map<dynamic, dynamic>;
+        final role = userData['role'];
 
-      if (role == 'tutor') {
-        Navigator.pushReplacementNamed(context, '/tutorDashboard', arguments: cred.user!.uid);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login Successful")));
+
+        if (role == 'tutor') {
+          Navigator.pushReplacementNamed(context, '/tutorDashboard', arguments: cred.user!.uid);
+        } else {
+          Navigator.pushReplacementNamed(context, '/studentDashboard', arguments: cred.user!.uid);
+        }
       } else {
-        Navigator.pushReplacementNamed(context, '/studentDashboard', arguments: cred.user!.uid);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("User data not found")));
       }
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'Login failed';

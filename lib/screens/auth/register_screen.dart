@@ -1,6 +1,7 @@
+// RegisterScreen.dart
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,7 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String role = 'student'; // default
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
   void registerUser() async {
     try {
@@ -28,9 +29,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: passwordController.text.trim(),
       );
 
-      await _db.collection('users').doc(cred.user!.uid).set({
+      // Save user data to Realtime Database
+      await _database.child('users/${cred.user!.uid}').set({
         'email': emailController.text.trim(),
         'role': role,
+        'createdAt': ServerValue.timestamp,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Registration successful. Please login.")));
