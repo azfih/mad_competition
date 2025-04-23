@@ -8,11 +8,37 @@ class CourseDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Course Detail: $courseId'),
-      ),
-      body: Center(
-        child: Text('Details of course: $courseId'),
+      appBar: AppBar(title: Text('Course Detail: $courseId')),
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Micro-lessons for this course',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          ListTile(
+            title: const Text("Lesson 1: Widgets Basics"),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                '/lessonView',
+                arguments: {'lessonId': 'lesson1'},
+              );
+            },
+          ),
+          ListTile(
+            title: const Text("Lesson 2: State Management"),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                '/lessonView',
+                arguments: {'lessonId': 'lesson2'},
+              );
+            },
+          ),
+        ],
       ),
     );
   }

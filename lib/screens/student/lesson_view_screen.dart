@@ -1,39 +1,36 @@
-// lib/screens/student/lesson_view_screen.dart
-
 import 'package:flutter/material.dart';
 
 class LessonViewScreen extends StatelessWidget {
   final String lessonId;
 
-  LessonViewScreen({required this.lessonId});
+  const LessonViewScreen({Key? key, required this.lessonId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Lesson View"),
-      ),
+      appBar: AppBar(title: const Text("Lesson View")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
-            Text(
-              "Lesson ID: $lessonId",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Lesson content goes here. You can display videos, slides, or other media related to the lesson.",
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 20),
+            Text("Lesson ID: $lessonId", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+            const Text("Lesson content goes here. Show video/text/slides."),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Example of navigating back to course details
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/qnaWall', arguments: {'lessonId': lessonId});
               },
-              child: Text("Back to Course Details"),
+              child: const Text("Go to Q&A Wall"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Mark lesson as completed logic here
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Lesson marked as completed!')),
+                );
+              },
+              child: const Text("Mark as Completed"),
             ),
           ],
         ),
